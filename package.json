@@ -1,0 +1,17 @@
+{
+  "name": "match-api",
+  "version": "1.0.0",
+  "description": "API para servir dados para o match-app e o match-adm",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jornada de Programador",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.4"
+  }
+}
