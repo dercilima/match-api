@@ -1,13 +1,13 @@
 import express from "express";
 import UserController from "../controllers/users.controller.js";
 
-const userRoutes = express.Router();
+const routes = express.Router();
 
-userRoutes.get("/users", UserController.getUsers);
-userRoutes.get("/users/search", UserController.getUserByEmail); // Precedência de rotas do Express
-userRoutes.get("/users/:id", UserController.getUserById);
-userRoutes.post("/users", UserController.addUser);
-userRoutes.put("/users/:id", UserController.updateUser);
-userRoutes.delete("/users/:id", UserController.deleteUser);
+routes.get("/users", UserController.getUsers);
+routes.get("/users/search", UserController.getUserByEmail); // Precedência de rotas do Express
+routes.get("/users/:id", UserController.getUserById);
+routes.post("/users", UserController.addUser);
+routes.put("/users/:id", UserController.updateUser);
+routes.delete("/users/:id", UserController.deleteUser);
 
-export default userRoutes;
+export default routes;
