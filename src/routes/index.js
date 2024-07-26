@@ -1,8 +1,13 @@
 import express from "express";
-import userRoutes from "./users.route.js";
+import users from "./users.route.js";
+import customers from "./customer.route.js";
 
 const routes = (app) => {
-    app.use(express.json(), userRoutes);
+	app.use(
+		express.json(),
+		users,
+		customers
+	);
 };
 
 export default routes;
