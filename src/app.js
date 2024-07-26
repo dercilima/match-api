@@ -1,18 +1,14 @@
 import express from "express";
 import connectDatabase from "./config/dbconnect.js";
-import routes from "./routes/index.js"
+import createRoutes from "./routes/index.js";
+import handleError from "./middlewares/handle-errors.middleware.js";
+import handlePageNotFound from "./middlewares/page-not-found.middleware.js";
 
-const database = await connectDatabase();
-
-database.on("error", (err) => {
-    console.error(`Erro de conexão: ${err}`);
-});
-
-database.on("open", () => {
-    console.log("Conexão ao MongoDB bem sucedida!");
-});
+await connectDatabase();
 
 const app = express();
-routes(app);
+createRoutes(app);
+handlePageNotFound(app);
+handleError(app);
 
 export default app;
