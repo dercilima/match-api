@@ -4,14 +4,13 @@
   "description": "API para servir dados para o match-app e o match-adm",
   "main": "build/index.js",
   "scripts": {
-    "start": "tsc-watch --onSuccess \"node ./build/index.js\"",
+    "start": "tsc-watch --onSuccess \"node --env-file=.env ./build/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint ."
   },
   "author": "Jornada de Programador",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.1"
