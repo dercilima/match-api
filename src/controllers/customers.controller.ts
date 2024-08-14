@@ -1,8 +1,9 @@
-import { customerModel } from "../models/customer.schema.js";
-import { NotFoundError } from "../errors/not-found.error.js";
+import { Request, Response, NextFunction } from "express";
+import { customerModel } from "../models/customer.schema";
+import { NotFoundError } from "../errors/not-found.error";
 
-class CustomerController {
-	static async getCustomers(req, res, next) {
+export class CustomerController {
+	static async getCustomers(req: Request, res: Response, next: NextFunction) {
 		try {
 			const customers = await customerModel.find({});
 			res.status(200).json(customers);
@@ -11,7 +12,7 @@ class CustomerController {
 		}
 	}
 
-	static async getCustomerById(req, res, next) {
+	static async getCustomerById(req: Request, res: Response, next: NextFunction) {
 		try {
 			const customerId = req.params.id;
 			const customer = await customerModel.findById(customerId);
@@ -25,7 +26,7 @@ class CustomerController {
 		}
 	}
 
-	static async addCustomer(req, res, next) {
+	static async addCustomer(req: Request, res: Response, next: NextFunction) {
 		try {
 			await customerModel.create(req.body);
 			res.status(200).json({
@@ -36,7 +37,7 @@ class CustomerController {
 		}
 	}
 
-	static async updateCustomer(req, res, next) {
+	static async updateCustomer(req: Request, res: Response, next: NextFunction) {
 		try {
 			const customerId = req.params.id;
 			const customer = await customerModel.findByIdAndUpdate(customerId, req.body);
@@ -52,5 +53,3 @@ class CustomerController {
 		}
 	}
 }
-
-export default CustomerController;

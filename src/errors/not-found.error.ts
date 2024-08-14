@@ -1,4 +1,4 @@
-import BaseError from "./base.error.js";
+import BaseError from "./base.error";
 
 export class NotFoundError extends BaseError {
     constructor(message = "Página não encontrada!") {

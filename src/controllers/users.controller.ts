@@ -1,8 +1,9 @@
-import { NotFoundError } from "../errors/not-found.error.js";
-import userModel from "../models/user.schema.js";
+import { Request, Response, NextFunction } from "express";
+import { NotFoundError } from "../errors/not-found.error";
+import userModel from "../models/user.schema";
 
-class UserController {
-	static async getUsers(req, res, next) {
+export class UserController {
+	static async getUsers(req: Request, res: Response, next: NextFunction) {
 		try {
 			const users = await userModel.find({});
 			res.status(200).json(users);
@@ -11,7 +12,7 @@ class UserController {
 		}
 	}
 
-	static async getUserById(req, res, next) {
+	static async getUserById(req: Request, res: Response, next: NextFunction) {
 		try {
 			const userId = req.params.id;
 			const user = await userModel.findById(userId);
@@ -25,7 +26,7 @@ class UserController {
 		}
 	}
 
-	static async addUser(req, res, next) {
+	static async addUser(req: Request, res: Response, next: NextFunction) {
 		try {
 			await userModel.create(req.body);
 			res.status(201).json({
@@ -36,10 +37,10 @@ class UserController {
 		}
 	}
 
-	static async updateUser(req, res, next) {
+	static async updateUser(req: Request, res: Response, next: NextFunction) {
 		try {
-			let id = req.params.id;
-			let user = await userModel.findByIdAndUpdate(id, req.body);
+			const id = req.params.id;
+			const user = await userModel.findByIdAndUpdate(id, req.body);
 			if (user) {
 				res.status(200).json({
 					message: "Usuário atualizado com sucesso!",
@@ -52,7 +53,7 @@ class UserController {
 		}
 	}
 
-	static async deleteUser(req, res, next) {
+	static async deleteUser(req: Request, res: Response, next: NextFunction) {
 		try {
 			const id = req.params.id;
 			const user = await userModel.findByIdAndDelete(id);
@@ -68,7 +69,7 @@ class UserController {
 		}
 	}
 
-	static async getUserByEmail(req, res, next) {
+	static async getUserByEmail(req: Request, res: Response, next: NextFunction) {
 		try {
 			const email = req.query.email;
 			const users = await userModel.find({ email: email });
@@ -78,5 +79,3 @@ class UserController {
 		}
 	}
 }
-
-export default UserController;
