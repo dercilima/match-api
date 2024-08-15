@@ -1,12 +1,18 @@
 import { Request, Response, NextFunction } from "express";
-import { customerModel } from "../models/customer.schema";
 import { NotFoundError } from "../errors/not-found.error";
+import { getFirestore } from "firebase-admin/firestore";
 
 export class CustomerController {
 	static async getCustomers(req: Request, res: Response, next: NextFunction) {
 		try {
-			const customers = await customerModel.find({});
-			res.status(200).json(customers);
+			const snapshot = await getFirestore().collection("customers").get();
+			const customers = snapshot.docs.map((doc) => {
+				return {
+					id: doc.id,
+					...doc.data(),
+				};
+			});
+			res.status(200).send(customers);
 		} catch (err) {
 			next(err);
 		}
@@ -15,9 +21,12 @@ export class CustomerController {
 	static async getCustomerById(req: Request, res: Response, next: NextFunction) {
 		try {
 			const customerId = req.params.id;
-			const customer = await customerModel.findById(customerId);
-			if (customer) {
-				res.status(200).send(customer);
+			const snapshot = await getFirestore().collection("customers").doc(customerId).get();
+			if (snapshot.exists) {
+				res.status(200).send({
+					id: snapshot.id,
+					...snapshot.data(),
+				});
 			} else {
 				throw new NotFoundError("Cliente não encontrado!");
 			}
@@ -28,8 +37,8 @@ export class CustomerController {
 
 	static async addCustomer(req: Request, res: Response, next: NextFunction) {
 		try {
-			await customerModel.create(req.body);
-			res.status(200).json({
+			await getFirestore().collection("customers").add(req.body);
+			res.status(200).send({
 				message: "Cliente cadastrado com sucesso!",
 			});
 		} catch (err) {
@@ -40,9 +49,12 @@ export class CustomerController {
 	static async updateCustomer(req: Request, res: Response, next: NextFunction) {
 		try {
 			const customerId = req.params.id;
-			const customer = await customerModel.findByIdAndUpdate(customerId, req.body);
+			const customer = await getFirestore()
+				.collection("customers")
+				.doc(customerId)
+				.update(req.body);
 			if (customer) {
-				res.status(200).json({
+				res.status(200).send({
 					message: `Cliente alterado com sucesso!`,
 				});
 			} else {

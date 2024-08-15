@@ -1,11 +1,8 @@
-import { Error } from "mongoose";
+import { FirebaseFirestoreError } from "firebase-admin/firestore";
 import BaseError from "./base.error";
 
 export class ValidationError extends BaseError {
-	constructor(err: Error.ValidationError) {
-		const messages = Object.values(err.errors)
-			.map((erro) => erro.message)
-			.join("; ");
-		super(400, `Erro de validação de dados: ${messages}`);
+	constructor(err: FirebaseFirestoreError) {
+		super(400, `Erro do banco de dados: ${err.message}`);
 	}
 }
