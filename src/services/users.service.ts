@@ -3,20 +3,18 @@ import { User } from "../models/user.model";
 import { NotFoundError } from "../errors/not-found.error";
 
 export class UsersService {
-	collection = getFirestore().collection("users");
+	readonly collection = getFirestore().collection("users");
 
 	async add(user: User) {
 		await this.collection.add(user);
 	}
 
 	async update(id: string, user: User) {
-		const result = await getFirestore()
-			.collection("users")
-			.doc(id)
-			.update({ ...user });
-		if (!result) {
+		const docRef = this.collection.doc(id);
+		if (!(await docRef.get()).exists) {
 			throw new NotFoundError("Usuário não encontrado!");
 		}
+		await docRef.update({ ...user });
 	}
 
 	async findAll(): Promise<User[]> {
@@ -39,5 +37,12 @@ export class UsersService {
 		} else {
 			throw new NotFoundError("Usuário não encontrado!");
 		}
+	}
+
+	async delete(id: string): Promise<void> {
+		if (!(await this.collection.doc(id).get()).exists) {
+			throw new NotFoundError("Usuário não encontrado!");
+		}
+		await this.collection.doc(id).delete();
 	}
 }
