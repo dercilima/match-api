@@ -1,17 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { NotFoundError } from "../errors/not-found.error";
 import { getFirestore } from "firebase-admin/firestore";
+import { UsersService } from "../services/users.service";
 
 export class UserController {
 	static async getUsers(req: Request, res: Response, next: NextFunction) {
 		try {
-			const usersSnapshot = await getFirestore().collection("users").get();
-			const users = usersSnapshot.docs.map((doc) => {
-				return {
-					id: doc.id,
-					...doc.data(),
-				};
-			});
+			const users = await new UsersService().findAll();
 			res.status(200).send(users);
 		} catch (err) {
 			console.log(err);
@@ -22,15 +16,8 @@ export class UserController {
 	static async getUserById(req: Request, res: Response, next: NextFunction) {
 		try {
 			const userId = req.params.id;
-			const userSnapshot = await getFirestore().collection("users").doc(userId).get();
-			if (userSnapshot.exists) {
-				res.status(200).send({
-					id: userSnapshot.id,
-					...userSnapshot.data(),
-				});
-			} else {
-				throw new NotFoundError("Usuário não encontrado!");
-			}
+			const user = await new UsersService().findById(userId);
+			res.status(200).send(user);
 		} catch (err) {
 			next(err);
 		}
@@ -38,7 +25,7 @@ export class UserController {
 
 	static async addUser(req: Request, res: Response, next: NextFunction) {
 		try {
-			await getFirestore().collection("users").add(req.body);
+			await new UsersService().add(req.body);
 			res.status(201).send({
 				message: "Usuário criado com sucesso!",
 			});
@@ -50,14 +37,10 @@ export class UserController {
 	static async updateUser(req: Request, res: Response, next: NextFunction) {
 		try {
 			const id = req.params.id;
-			const user = await getFirestore().collection("users").doc(id).update(req.body);
-			if (user) {
-				res.status(200).send({
-					message: "Usuário atualizado com sucesso!",
-				});
-			} else {
-				throw new NotFoundError("Usuário não encontrado!");
-			}
+			await new UsersService().update(id, req.body);
+			res.status(200).send({
+				message: "Usuário atualizado com sucesso!",
+			});
 		} catch (err) {
 			next(err);
 		}
@@ -66,14 +49,10 @@ export class UserController {
 	static async deleteUser(req: Request, res: Response, next: NextFunction) {
 		try {
 			const id = req.params.id;
-			const user = await getFirestore().collection("users").doc(id).delete();
-			if (user) {
-				res.status(200).send({
-					message: "Usuário excluído com sucesso!",
-				});
-			} else {
-				throw new NotFoundError("Usuário não encontrado!");
-			}
+			await new UsersService().delete(id);
+			res.status(200).send({
+				message: "Usuário excluído com sucesso!",
+			});
 		} catch (err) {
 			next(err);
 		}
