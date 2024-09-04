@@ -2,9 +2,13 @@
   "name": "match-api",
   "version": "1.0.0",
   "description": "API para servir dados para o match-app e o match-adm",
-  "main": "build/index.js",
+  "main": "lib/index.js",
+  "engines": {
+    "node": "20"
+  },
   "scripts": {
     "start": "tsc-watch --onSuccess \"node --env-file=.env ./build/index.js\"",
+    "build": "npm run lint && tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint ."
   },
@@ -12,7 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
-    "firebase-admin": "^12.3.1"
+    "firebase-admin": "^12.3.1",
+    "firebase-functions": "^5.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

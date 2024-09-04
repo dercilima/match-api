@@ -2,7 +2,7 @@
 	"extends": "@tsconfig/node20/tsconfig.json",
 	"compilerOptions": {
 		"rootDir": "src", // Diretório de códigos TypeScript
-		"outDir": "build", // Diretório de saída para os arquivos compilados
+		"outDir": "lib", // Diretório de saída para os arquivos compilados
 		"sourceMap": true, // Gera mapas de origem para facilitar o debug
 		"noImplicitAny": true, // Não permite declaração de variáveis ou parâmetros sem tipo
 		"noImplicitReturns": true, // Verifica se todas as funções possuem tipo de retorno informado
