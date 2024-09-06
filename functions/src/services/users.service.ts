@@ -52,6 +52,7 @@ export class UsersService {
 		if (!(await this.collection.doc(id).get()).exists) {
 			throw new NotFoundError("Usuário não encontrado!");
 		}
+		await this.authService.delete(id);
 		await this.collection.doc(id).delete();
 	}
 }
