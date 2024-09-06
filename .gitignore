@@ -1,2 +1,4 @@
 # Firebase
 .firebaserc
+ui-debug.log
+functions/.env
