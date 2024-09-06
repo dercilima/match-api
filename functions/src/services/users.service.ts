@@ -1,12 +1,20 @@
 import { getFirestore } from "firebase-admin/firestore";
 import { User } from "../models/user.model";
 import { NotFoundError } from "../errors/not-found.error";
+import { AuthService } from "./auth.service";
 
 export class UsersService {
 	readonly collection = getFirestore().collection("users");
+	private authService: AuthService;
+
+	constructor() {
+		this.authService = new AuthService();
+	}
 
 	async add(user: User) {
-		await this.collection.add(user);
+		const authUser = await this.authService.create(user);
+		delete user.password;
+		await this.collection.doc(authUser.uid).set(user);
 	}
 
 	async update(id: string, user: User) {
