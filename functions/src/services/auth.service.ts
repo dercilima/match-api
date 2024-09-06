@@ -1,5 +1,6 @@
 import { FirebaseAuthError, getAuth as getAdminAuth, UpdateRequest } from "firebase-admin/auth";
 import { User } from "../models/user.model";
+import { EmailAlreadyInUseError } from "../errors/email-already-in-use.error";
 import { UserRecord } from "firebase-functions/v1/auth";
 import {
 	signInWithEmailAndPassword,
@@ -15,5 +16,15 @@ export class AuthService {
 				password: user.password,
 				displayName: user.nome,
 			})
+			.catch((err) => {
+				if (err instanceof FirebaseAuthError) {
+					if (err.code === "auth/email-already-exists") {
+						throw new EmailAlreadyInUseError();
+					}
+				}
+				throw err;
+			});
+	}
+
 	}
 }
