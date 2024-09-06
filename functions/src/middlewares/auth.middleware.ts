@@ -21,6 +21,18 @@ export const auth = (app: express.Express) => {
 					next(new Unauthorized());
 				});
 
+			if (decodedIdToken) {
+				console.log(decodedIdToken);
+				
+                const user = await new UsersService().findById(decodedIdToken.uid);
+
+                if (!user) {
+                    throw new ForbiddenError();
+                }
+
+				req.user = user;
+				return next();
+			}
 		}
 		return next(new Unauthorized());
 	});
