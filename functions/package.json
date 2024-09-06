@@ -15,7 +15,9 @@
   "author": "Jornada de Programador",
   "license": "ISC",
   "dependencies": {
+    "celebrate": "^15.0.3",
     "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
     "firebase-admin": "^12.3.1",
     "firebase-functions": "^5.1.1"
   },
