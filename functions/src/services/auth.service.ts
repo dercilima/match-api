@@ -26,6 +26,19 @@ export class AuthService {
 			});
 	}
 
+	async update(id: string, user: User) {
+		const props: UpdateRequest = {
+			email: user.email,
+			displayName: user.nome,
+		};
+
+		if (user.password) {
+			props.password = user.password;
+		}
+
+		await getAdminAuth().updateUser(id, props);
+	}
+
 
 	async login(email: string, password: string): Promise<UserCredential> {
 		return await signInWithEmailAndPassword(getFirebaseAuth(), email, password);

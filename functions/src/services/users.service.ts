@@ -22,6 +22,7 @@ export class UsersService {
 		if (!(await docRef.get()).exists) {
 			throw new NotFoundError("Usuário não encontrado!");
 		}
+		await this.authService.update(id, user);
 		await docRef.update({ ...user });
 	}
 
